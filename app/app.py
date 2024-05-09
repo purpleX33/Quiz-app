@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Define routes
 @app.route('/')
-def index():
+def login():
     return render_template('login.html')
 
 @app.route('/signup')
