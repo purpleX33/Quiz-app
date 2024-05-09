@@ -1,12 +1,24 @@
 from flask import Flask, render_template
-from mongo import *
+from mongo import get_quiz_questions
 
 app = Flask(__name__)
 
 # Define routes
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('login.html')
+
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+@app.route('/score')
+def score():
+    return render_template('score.html')
+
+@app.route('/genre')
+def genre():
+    return render_template('genre.html')
 
 @app.route('/quiz')
 def quiz():

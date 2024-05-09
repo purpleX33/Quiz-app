@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Genre - Quiz Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+    <div id="genrePage" class="genre-container">
+        <h2>Select Quiz Genre</h2>
+        <div class="genre-grid">
+            <div class="genre-box" onclick="selectGenre('Science')">
+                <img src="./images/science.jpg" alt="Science">
+                <button>Science</button>
+            </div>
+            <div class="genre-box" onclick="selectGenre('Mathematics')">
+                <img src="./images/mathematics.jpg" alt="Mathematics">
+                <button>Mathematics</button>
+            </div>
+            <div class="genre-box" onclick="selectGenre('History')">
+                <img src="./images/history.jpg" alt="History">
+                <button>History</button>
+            </div>
+            <div class="genre-box" onclick="selectGenre('Geography')">
+                <img src="./images/geography.jpg" alt="Geography">
+                <button class="button-align">Geography</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

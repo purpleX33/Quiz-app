@@ -1,42 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
+    <title>Quiz - Quiz Application</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='quiz.js') }}"></script> <!-- Include the external JavaScript file -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
-
-<body>
-    <header>
-        <h1>Quiz</h1>
-    </header>
-    <main>
-        <div>
-            <div id="questionContainer">
-                <!-- Loop through the 'questions' passed from Flask -->
-                {% for question in questions %}
-                <div class="question">
-                    <p>{{ question.question }}</p> <!-- Display the question -->
-                    <form id="answerForm">
-                        <!-- Create buttons for each answer option -->
-                        {% for option in question.incorrect_answers %}
-                        <button type="button" class="answerButton">{{ option }}</button>
-                        {% endfor %}
-                        <button type="button" class="answerButton">{{ question.correct_answer }}</button>
-                        <!-- Display the correct answer -->
-                    </form>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div id="timer"></div>
-    </main>
-    <footer>
-        <p>&copy; 2024 Quiz App</p>
-    </footer>
+<body >
+    <div id="quizPage" class="container">
+        <h2 id="questionTitle"></h2>
+        <div id="optionsContainer" class="options-grid"></div>
+        <div>You have <span id="time">00:30</span> seconds remaining to attempt all questions!</div>
+    </div>
 </body>
-
 </html>
