@@ -74,6 +74,41 @@ function loadQuestions() {
 
 window.addEventListener("load", loadQuestions);
 
+
+function startTimer(duration) {
+    var timer = document.getElementById('timer');
+    var startTime = Date.now();
+    var endTime = startTime + duration * 6000;  // duration in minutes
+    var timerInterval = setInterval(function() {
+        var remaining = endTime - Date.now();
+        var minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+        timer.textContent = seconds + " seconds ";
+
+        if (remaining < 1000) {
+            clearInterval(timerInterval);
+            timer.textContent = 'no time left!';
+            displaySessionExpiredWarning();
+            setTimeout(function() {
+                window.location.href = 'quiz.html'; // Redirect to the index.html page
+            }, 5000); // Redirect after 5 seconds to give the user time to read the message
+        }
+    }, 1000);
+}
+
+ // Display session expired warning
+ function displaySessionExpiredWarning() {
+    var warning = document.getElementById('warning');
+    if (!warning) {
+        warning = document.createElement('p');
+        warning.id = 'warning';
+        document.body.appendChild(warning);
+    }
+    warning.textContent = 'You will be directed to the next question';
+}
+
+
+
 // function setupTimer() {
 //     var display = document.querySelector('#time'),
 //     timer = new CountDownTimer(10);
@@ -96,29 +131,29 @@ window.addEventListener("load", loadQuestions);
 
 
 
-function startTimer(duration, display) {
-    var timer = duration;
+//function startTimer(duration, display) {
+    //var timer = duration;
    
-    var intervalId = setInterval(function () {
-        var seconds = timer;
+//     var intervalId = setInterval(function () {
+//         var seconds = timer;
 
-        var displayMinutes = Math.floor(seconds / 60);
-        var displaySeconds = seconds % 60;
+//         var displayMinutes = Math.floor(seconds / 60);
+//         var displaySeconds = seconds % 60;
 
-        displayMinutes = displayMinutes < 10 ? "0" + displayMinutes : displayMinutes;
-        displaySeconds = displaySeconds < 10 ? "0" + displaySeconds : displaySeconds;
+//         displayMinutes = displayMinutes < 10 ? "0" + displayMinutes : displayMinutes;
+//         displaySeconds = displaySeconds < 10 ? "0" + displaySeconds : displaySeconds;
 
-        display.textContent = displayMinutes + ":" + displaySeconds;
+//         display.textContent = displayMinutes + ":" + displaySeconds;
 
-        if (--timer < 0) {
+//         if (--timer < 0) {
             
-            clearInterval(intervalId);
-            alert("Time's up!");
-            window.location.href = 'score.html';
+//             clearInterval(intervalId);
+//             alert("Time's up!");
+//             window.location.href = 'score.html';
 
-        }
-    }, 1000);
-}
+//         }
+//     }, 1000);
+// }
 
 function displayQuestion() {
     

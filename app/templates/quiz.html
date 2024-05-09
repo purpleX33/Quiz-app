@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz - Quiz Application</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
 <body >
     <div id="quizPage" class="container">
-        <h2 id="questionTitle"></h2>
+        <h2 id="questionTitle">{{ questions.question }}</h2>
         <div id="optionsContainer" class="options-grid"></div>
-        <div>You have <span id="time">00:30</span> seconds remaining to attempt all questions!</div>
+        <div id="timer-container">You have <span id="timer"></span>
+        <p id="warning"></p></div>
     </div>
 </body>
 </html>

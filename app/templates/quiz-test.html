@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='quiz.js') }}"></script> <!-- Include the external JavaScript file -->
 </head>
 
@@ -19,7 +19,7 @@
                 <!-- Loop through the 'questions' passed from Flask -->
                 {% for question in questions %}
                 <div class="question">
-                    <p>{{ question.question }}</p> <!-- Display the question -->
+                    <p>{{ questions.question }}</p> <!-- Display the question -->
                     <form id="answerForm">
                         <!-- Create buttons for each answer option -->
                         {% for option in question.incorrect_answers %}
