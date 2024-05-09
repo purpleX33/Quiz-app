@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Welcome to the Quiz App</h1>
+    </header>
+    <main>
+        <p>Ready to test your knowledge? Click the button below to start the quiz!</p>
+        <a href="{{ url_for('quiz') }}" class="btn">Start Quiz</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Quiz App</p>
+    </footer>
+</body>
+
+</html>
