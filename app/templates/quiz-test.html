@@ -19,7 +19,7 @@
                 <!-- Loop through the 'questions' passed from Flask -->
                 {% for question in questions %}
                 <div class="question">
-                    <p>{{ question.question }}</p> <!-- Display the question -->
+                    <p>{{ questions.question }}</p> <!-- Display the question -->
                     <form id="answerForm">
                         <!-- Create buttons for each answer option -->
                         {% for option in question.incorrect_answers %}

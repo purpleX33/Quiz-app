@@ -51,10 +51,10 @@ input[type="text"], input[type="password"], input[type="email"], input[type="num
 }
 
 button {
-    margin: 22px 10px;
-    padding: 10px 10px;
+    margin: 05px 10px;
+    padding: 15px;
     cursor: pointer;
-    background-color: #0056b3;
+    background-color: #0042259e;
     color: white;
     border: none;
     width: 85%;
@@ -63,7 +63,7 @@ button {
 
 .sign-btn {
     margin: 22px 10px;
-    padding: 15px ;
+    padding: 8px ;
     cursor: pointer;
     background-color: #0042259e;
     color: white;
@@ -179,4 +179,12 @@ body, html {
     .genre-box {
         width: 80%;
     }
+}
+
+#questionTitle {
+    margin-bottom: 85px;
+}
+
+#timer-container {
+    margin-top: 50px;
 }
