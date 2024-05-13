@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from mongo import get_quiz_questions
+from mongo import get_quiz_questions,api_to_mongo
 
 app = Flask(__name__)
 
@@ -18,6 +18,7 @@ def score():
 
 @app.route('/genre')
 def genre():
+    api_to_mongo(category='linux')
     return render_template('genre.html')
 
 @app.route('/quiz')
