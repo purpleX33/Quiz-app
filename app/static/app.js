@@ -21,9 +21,22 @@ function signup() {
     } else if (password !== confirmPassword) {
         alert('Passwords do not match');
     } else {
-        localStorage.setItem('user', JSON.stringify({ usernameEmail, password })); // Store user data in local storage
-        alert('Signup successful. You can now log in.');
-        window.location.href = 'login.html'; // Redirect to login page
+        fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: usernameEmail, password: password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Signup successful. You can now log in.');
+                window.location.href = '/';
+            } else {
+                alert('Signup failed: ' + data.message);
+            }
+        });
     }
 }
 
