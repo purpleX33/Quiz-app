@@ -54,7 +54,24 @@ const questionBank = {
 
 function selectGenre(genre) {
     localStorage.setItem('selectedGenre', genre); // Save selected genre
-    window.location.href = 'quiz.html'; // Redirect to quiz page
+            // Send AJAX request to Flask server
+            fetch('/api_to_mongo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ genre: genre })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('API call successful');
+                } else {
+                    console.error('API call failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });    
 }
 
 function loadQuestions() {

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from mongo import get_quiz_questions,api_to_mongo
 
 app = Flask(__name__)
@@ -18,13 +18,24 @@ def score():
 
 @app.route('/genre')
 def genre():
-    api_to_mongo(category='linux')
     return render_template('genre.html')
 
 @app.route('/quiz')
 def quiz():
     questions = get_quiz_questions()
     return render_template('quiz.html', questions=questions)
+
+@app.route('/api_to_mongo', methods=['POST'])
+def call_api_to_mongo():
+    data = request.json
+    genre = data.get('genre')
+    print(genre)
+    if genre:
+        api_to_mongo(genre)
+        print(genre)
+        return 'API call successful', 200
+    else:
+        return 'Invalid request', 400
 
 @app.route('/submit', methods=['POST'])
 def submit():

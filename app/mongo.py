@@ -45,34 +45,11 @@ def api_to_mongo(category, difficulty='Easy'):
       'X-Api-Key': 'UoHJy7ilBF00V5FP7HQBFqMqsrE0m4a2nib5GzJ4'
     }
     response = requests.get(url, headers=headers, params=params)
-
-     # Insert the API response into MongoDB
     data = json.loads(response.text)
-    
-    insert_many_document('questions', data)
 
-    # Close MongoDB connection
+    # Insert the API response into MongoDB
+    insert_many_document('questions', data)
     print("Data inserted into MongoDB successfully.")
 
 
-# def api_to_mongo(category, difficulty='Easy'):
-
-
-#     url = "https://quizapi.io/api/v1/questions"
-
-#     payload = {
-#         'apiKey': 'UoHJy7ilBF00V5FP7HQBFqMqsrE0m4a2nib5GzJ4',
-#         'limit': 10,
-#         'category': category,  # Use the category parameter here
-#         'difficulty': difficulty
-#     }
-#     headers = {
-#       'Content-Type': 'application/x-www-form-urlencoded',
-#       'X-Api-Key': 'UoHJy7ilBF00V5FP7HQBFqMqsrE0m4a2nib5GzJ4'
-#     }
-
-#     response = requests.request("GET", url, headers=headers, data=payload)
-#     text= response.text
-#     data = response.json()
-#     print(data)
     
