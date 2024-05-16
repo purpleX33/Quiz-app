@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz - Quiz Application</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
 <body>
     <div id="quizPage" class="container">
         <div id="questionContainer">
-            {% for question_index in questions %}
-            <h2 id="questionTitle">{{ question_index.question }}</h2>
-            <div id="optionsContainer" class="options-grid">
-                {% for option in question_index.answers.values() %}
-                    <button class="option-btn">{{ option }}</button>
-                {% endfor %}
+            <div id="questionTitle">
+
             </div>
-        {% endfor %}
+            <div id="optionsContainer" class="options-grid">
         </div>
         <div id="timer-container">You have <span id="timer"></span>
         <p id="warning"></p></div>
         <button id="nextButton">Next Question</button>
     </div>
 </body>
+<script>
+    // Pass the questions data to the JavaScript file
+    var questions = {{ questions | tojson }};
+</script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
 </html>

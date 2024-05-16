@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import requests
 import json
+from bson import ObjectId
 
 def get_mongo_connection():
     client = MongoClient("mongodb+srv://pr4tik33:Mongo_pr4tik33@quiz.1aqzltf.mongodb.net/")
@@ -37,7 +38,7 @@ def get_quiz_questions():
     client = get_mongo_connection()
     db = client.quiz
     questions_coll = db.get_collection("questions")
-    questions = list(questions_coll.find())
+    questions = list(questions_coll.find({}, {'_id': 0}))
     client.close()
     return questions
 
