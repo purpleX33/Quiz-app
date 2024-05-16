@@ -22,6 +22,17 @@ def insert_many_document(collection, documents):
     client.close()
     return result.inserted_ids
 
+def truncate_collection(collection):
+    client = get_mongo_connection()
+    db = client.quiz
+    coll = db.get_collection(collection)
+    # Delete all documents in the collection
+    result = coll.delete_many({})
+    # Print the number of documents deleted
+    print(f"{result.deleted_count} documents deleted from the collection {collection}")
+    client.close()
+    return result.deleted_count
+
 def get_quiz_questions():
     client = get_mongo_connection()
     db = client.quiz
@@ -33,23 +44,24 @@ def get_quiz_questions():
 def api_to_mongo(category, difficulty='Easy'):
     # Define the API endpoint and parameters
 
-    url = "https://quizapi.io/api/v1/questions"
+    url = "https://opentdb.com/api.php"
     params = {
-        'apiKey': 'UoHJy7ilBF00V5FP7HQBFqMqsrE0m4a2nib5GzJ4',
-        'limit': 10,
-        'category': category,
-        'difficulty': difficulty
+    'amount':'10',
+    'category':'18',
+    'difficulty':'easy',
+    'type':'multiple',
     }
-    headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'X-Api-Key': 'UoHJy7ilBF00V5FP7HQBFqMqsrE0m4a2nib5GzJ4'
-    }
-    response = requests.get(url, headers=headers, params=params)
-    data = json.loads(response.text)
-
-    # Insert the API response into MongoDB
-    insert_many_document('questions', data)
-    print("Data inserted into MongoDB successfully.")
+    # response = requests.request("GET", url, headers=headers, params=params)
+    response = requests.get( url, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        print(data['results'])
+        truncate_collection('questions')
+        insert_many_document('questions', data)
+        print("Data inserted into MongoDB successfully.")
+    else:
+        # Return an error message if the request failed
+        return f"Error: {response.status_code}"
 
 
     
