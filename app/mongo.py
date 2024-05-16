@@ -41,23 +41,22 @@ def get_quiz_questions():
     client.close()
     return questions
 
-def api_to_mongo(category, difficulty='Easy'):
+def api_to_mongo(category='18', difficulty='easy'):
     # Define the API endpoint and parameters
 
     url = "https://opentdb.com/api.php"
     params = {
     'amount':'10',
-    'category':'18',
-    'difficulty':'easy',
+    'category':category,
+    'difficulty': difficulty,
     'type':'multiple',
     }
     # response = requests.request("GET", url, headers=headers, params=params)
     response = requests.get( url, params=params)
     if response.status_code == 200:
         data = response.json()
-        print(data['results'])
         truncate_collection('questions')
-        insert_many_document('questions', data)
+        insert_many_document('questions', data['results'])
         print("Data inserted into MongoDB successfully.")
     else:
         # Return an error message if the request failed
