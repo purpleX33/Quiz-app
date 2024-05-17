@@ -188,3 +188,11 @@ body, html {
 #timer-container {
     margin-top: 50px;
 }
+
+.correct-answer, .correct-answer:hover{
+    background-color: rgb(3, 145, 3); 
+}
+
+.incorrect-answer, .incorrect-answer:hover{
+    background-color: red; 
+}

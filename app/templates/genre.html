@@ -11,21 +11,20 @@
     <div id="genrePage" class="genre-container">
         <h2>Select Quiz Genre</h2>
         <div class="genre-grid">
-            <div class="genre-box" onclick="selectGenre('Science')">
-                <img src="./images/science.jpg" alt="Science">
-                <button>Science</button>
+            <div class="genre-box" onclick="selectGenre('22')">
+                <a href="{{ url_for('quiz') }}"><button class="button-align">Geography</button></a>
             </div>
-            <div class="genre-box" onclick="selectGenre('Mathematics')">
-                <img src="./images/mathematics.jpg" alt="Mathematics">
-                <button>Mathematics</button>
+            <div class="genre-box" onclick="selectGenre('23')">
+                <a href="{{ url_for('quiz') }}"><button class="button-align">History</button></a>
             </div>
-            <div class="genre-box" onclick="selectGenre('History')">
-                <img src="./images/history.jpg" alt="History">
-                <button>History</button>
+            <div class="genre-box" onclick="selectGenre('18')">
+                <a href="{{ url_for('quiz') }}"><button class="button-align">Science: Computers</button></a>
             </div>
-            <div class="genre-box" onclick="selectGenre('Geography')">
-                <img src="./images/geography.jpg" alt="Geography">
-                <button class="button-align">Geography</button>
+            <div class="genre-box" onclick="selectGenre('9')">
+                <a href="{{ url_for('quiz') }}"><button class="button-align">General Knowledge</button></a>
+            </div>
+            <div class="genre-box" onclick="selectGenre('19')">
+                <a href="{{ url_for('quiz') }}"><button class="button-align">Maths</button></a>
             </div>
         </div>
     </div>
