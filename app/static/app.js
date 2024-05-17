@@ -1,3 +1,46 @@
+// User authentication and signup
+function login() {
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    const userData = JSON.parse(localStorage.getItem('user'));
+ 
+    if (userData && username === userData.usernameEmail && password === userData.password) {
+        window.location.href = 'genre.html'; // Redirect to genre selection page
+    } else {
+        alert("Invalid credentials!");
+    }
+}
+ 
+function signup() {
+    const usernameEmail = document.getElementById('usernameEmail').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+ 
+    if (!usernameEmail || !password || !confirmPassword) {
+        alert('Please fill in all fields');
+    } else if (password !== confirmPassword) {
+        alert('Passwords do not match');
+    } else {
+        fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: usernameEmail, password: password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Signup successful. You can now log in.');
+                window.location.href = '/';
+            } else {
+                alert('Signup failed: ' + data.message);
+            }
+        });
+    }
+}
+
+
 function selectGenre(genre) {
     localStorage.setItem('selectedGenre', genre); // Save selected genre
             // Send AJAX request to Flask server
