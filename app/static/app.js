@@ -118,10 +118,30 @@ function moveNext() {
     if (currentIndex < questions.length) {
         updateQuestion(currentIndex);
     } else {
-        alert("End of quiz.Your score is "+ScoreTracker+" Thank you!");
+        sendScoreToServer(ScoreTracker);
+        window.location.href = '/score';
     }
 }
-
+// Function to send the score to the server
+function sendScoreToServer(score) {
+    fetch('/score', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ score: score })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Score sent successfully');
+        } else {
+            console.error('Failed to send score');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 // Function to shuffle an array (Fisher-Yates shuffle algorithm)
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -146,7 +166,7 @@ if (window.location.pathname.includes('/quiz')) {
         if (currentIndex < questions.length) {
             updateQuestion(currentIndex);
         } else {
-            alert("End of quiz. Thank you!");
+            window.location.href = '/score';;
         }
     });
 }

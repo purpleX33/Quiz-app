@@ -1,7 +1,7 @@
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from mongo import get_quiz_questions, get_mongo_connection,api_to_mongo
-
+from mongo import get_quiz_questions, get_mongo_connection,api_to_mongo,insert_document,get_score
+import datetime
 
 
 app = Flask(__name__)
@@ -52,7 +52,24 @@ def signup():
 
 @app.route('/score')
 def score():
-    return render_template('score.html')
+    ScoreTracker=get_score(session['user_id'])
+    return render_template('score.html', score=ScoreTracker)
+
+@app.route('/score', methods=['POST'])
+def save_score():
+    # Assuming the score is sent as JSON data in the request body
+    data = request.json
+    score = data.get('score')  # Get the score from the JSON data
+    userID= session['user_id']
+    
+    document = {
+        'user_id': userID,
+        'score': score,
+        'timestamp': datetime.datetime.now()
+    }
+    insert_document('ScoreTracker', document)
+    return jsonify({'success': True}), 200
+
 
 @app.route('/genre')
 def genre():

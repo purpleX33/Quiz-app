@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
-<body onload="displayScore()">
+<body>
     <div id="scorePage" class="container">
-        <h2>Your Score</h2>
+        <h2>Your Score is {{score.score}}</h2>
         <p id="finalScore"></p>
-        <button onclick="window.location.href='genre.html'">Try Another Genre</button>
+        <button onclick="window.location.href='/genre'">Try Another Genre</button>
     </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient,DESCENDING
 import requests
 import json
 from bson import ObjectId
@@ -41,6 +41,17 @@ def get_quiz_questions():
     questions = list(questions_coll.find({}, {'_id': 0}))
     client.close()
     return questions
+
+def get_score(user_id):
+    client = get_mongo_connection()
+    db = client.quiz
+    score_coll = db.get_collection("ScoreTracker")
+    latest_score = score_coll.find_one(
+        {'user_id': user_id},
+        sort=[('timestamp', DESCENDING)]
+    )
+    client.close()
+    return latest_score
 
 def api_to_mongo(category='18', difficulty='easy'):
     # Define the API endpoint and parameters
