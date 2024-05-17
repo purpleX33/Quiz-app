@@ -3,19 +3,19 @@ function login() {
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
     const userData = JSON.parse(localStorage.getItem('user'));
-
+ 
     if (userData && username === userData.usernameEmail && password === userData.password) {
         window.location.href = 'genre.html'; // Redirect to genre selection page
     } else {
         alert("Invalid credentials!");
     }
 }
-
+ 
 function signup() {
     const usernameEmail = document.getElementById('usernameEmail').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-
+ 
     if (!usernameEmail || !password || !confirmPassword) {
         alert('Please fill in all fields');
     } else if (password !== confirmPassword) {
@@ -40,173 +40,113 @@ function signup() {
     }
 }
 
-// Genre selection and quiz handling
-let currentQuestionIndex = 0;
-let score = 0;
-let totalQuestions = 0;
-let questions = [];
-
-const questionBank = {
-    "Science": [
-        { question: "What is the chemical symbol for the element oxygen?", options: ["O", "Ox", "Om", "Op"], answer: "O" },
-        { question: "What planet is known as the Red Planet?", options: ["Mars", "Jupiter", "Earth", "Venus"], answer: "Mars" }
-    ],
-    "Mathematics": [
-        { question: "What is the square root of 144?", options: ["12", "14", "16", "18"], answer: "12" },
-        { question: "What is 15% of 200?", options: ["30", "25", "50", "20"], answer: "30" }
-    ],
-    "History": [
-        { question: "Who discovered America?", options: ["Christopher Columbus", "Leif Erikson", "Marco Polo", "Amerigo Vespucci"], answer: "Christopher Columbus" },
-        { question: "What year did the Titanic sink?", options: ["1912", "1905", "1898", "1923"], answer: "1912" }
-    ],
-    "Geography": [
-        { question: "What is the longest river in the world?", options: ["Nile", "Amazon", "Yangtze", "Mississippi"], answer: "Amazon" },
-        { question: "What is the capital of Australia?", options: ["Sydney", "Melbourne", "Canberra", "Perth"], answer: "Canberra" }
-    ]
-};
 
 function selectGenre(genre) {
     localStorage.setItem('selectedGenre', genre); // Save selected genre
-    window.location.href = 'quiz.html'; // Redirect to quiz page
+            // Send AJAX request to Flask server
+            fetch('/api_to_mongo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ genre: genre })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('API call successful');
+                } else {
+                    console.error('API call failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });    
 }
-
-function loadQuestions() {
-    const genre = localStorage.getItem('selectedGenre');
-    questions = questionBank[genre];
-    totalQuestions = questions.length;
-    currentQuestionIndex = 0;
-    score = 0;
-    if (questions) {
-        displayQuestion();
-        startTimer(3, document.getElementById('time'));
-    } else {
-        alert("No questions found for this genre.");
-    }
-  
-}
-
-window.addEventListener("load", loadQuestions);
-
-
-function startTimer(duration) {
-    var timer = document.getElementById('timer');
-    var startTime = Date.now();
-    var endTime = startTime + duration * 6000;  // duration in minutes
-    var timerInterval = setInterval(function() {
-        var remaining = endTime - Date.now();
-        var minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-        timer.textContent = seconds + " seconds ";
-
-        if (remaining < 1000) {
-            clearInterval(timerInterval);
-            timer.textContent = 'no time left!';
-            displaySessionExpiredWarning();
-            setTimeout(function() {
-                window.location.href = 'quiz.html'; // Redirect to the index.html page
-            }, 5000); // Redirect after 5 seconds to give the user time to read the message
-        }
-    }, 1000);
-}
-
- // Display session expired warning
- function displaySessionExpiredWarning() {
-    var warning = document.getElementById('warning');
-    if (!warning) {
-        warning = document.createElement('p');
-        warning.id = 'warning';
-        document.body.appendChild(warning);
-    }
-    warning.textContent = 'You will be directed to the next question';
-}
-
-
-
-// function setupTimer() {
-//     var display = document.querySelector('#time'),
-//     timer = new CountDownTimer(10);
-
-// timer.onTick(format).onTick(restart).start();
-
-// function restart() {
-//   if (this.expired()) {
-//     setTimeout(function() { timer.start(); }, 1000);
-//   }
-// }
-
-// function format(minutes, seconds) {
-//   minutes = minutes < 10 ? "0" + minutes : minutes;
-//   seconds = seconds < 10 ? "0" + seconds : seconds;
-//   display.textContent = minutes + ':' + seconds;
-// }
-// }
-
-
-
-
-//function startTimer(duration, display) {
-    //var timer = duration;
-   
-//     var intervalId = setInterval(function () {
-//         var seconds = timer;
-
-//         var displayMinutes = Math.floor(seconds / 60);
-//         var displaySeconds = seconds % 60;
-
-//         displayMinutes = displayMinutes < 10 ? "0" + displayMinutes : displayMinutes;
-//         displaySeconds = displaySeconds < 10 ? "0" + displaySeconds : displaySeconds;
-
-//         display.textContent = displayMinutes + ":" + displaySeconds;
-
-//         if (--timer < 0) {
-            
-//             clearInterval(intervalId);
-//             alert("Time's up!");
-//             window.location.href = 'score.html';
-
-//         }
-//     }, 1000);
-// }
-
-function displayQuestion() {
+function updateQuestion(index) {
+    // Get the current question from the questions array
+    var currentQuestion = questions[index];
     
-    if (currentQuestionIndex < questions.length) {
-        const question = questions[currentQuestionIndex];
-        const questionTitle = document.getElementById('questionTitle');
-        const optionsContainer = document.getElementById('optionsContainer');
-
-        questionTitle.textContent = `Q${currentQuestionIndex + 1}: ${question.question}`;
-        optionsContainer.innerHTML = ''; // Clear previous options
-
-        question.options.forEach(option => {
-            const button = document.createElement('button');
-            button.textContent = option;
-            button.onclick = () => checkAnswer(option, question.answer);
-            optionsContainer.appendChild(button);
+    // Combine correct and incorrect answers
+    var allAnswers = currentQuestion.incorrect_answers.concat([currentQuestion.correct_answer]);
+    
+    // Shuffle the combined array
+    shuffleArray(allAnswers);
+    
+    // Display the question title
+    document.getElementById("questionTitle").innerText = currentQuestion.question;
+    
+    // Clear previous options
+    var optionsContainer = document.getElementById("optionsContainer");
+    optionsContainer.innerHTML = "";
+    
+    // Display options as buttons
+    allAnswers.forEach(function(option) {
+        var button = document.createElement("button");
+        button.classList.add("option-btn");
+        button.innerText = option;
+        button.addEventListener("click", function() {
+            checkAnswer(option, currentQuestion.correct_answer);
         });
-        
+        optionsContainer.appendChild(button);
+    });
+}
 
+// Function to check if the selected answer is correct
+function checkAnswer(selectedAnswer, correctAnswer) {
+    var buttons = document.getElementsByClassName("option-btn");
+    for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i];
+        button.disabled = true; // Disable further clicks on all buttons
+        if (button.innerText === selectedAnswer) {
+            if (selectedAnswer === correctAnswer) {
+                ScoreTracker++;
+                button.classList.add("correct-answer");
+            } else {
+                button.classList.add("incorrect-answer");
+            }
+        }
+    }
+    // Delay moving to the next question
+    setTimeout(function() {
+        moveNext();
+    }, 500); // Adjust the delay time as needed
+}
+
+// Function to move to the next question
+function moveNext() {
+    currentIndex++;
+    if (currentIndex < questions.length) {
+        updateQuestion(currentIndex);
     } else {
-        localStorage.setItem('finalScore', score);
-        localStorage.setItem('totalQuestions', totalQuestions);
-        window.location.href = 'score.html';
+        alert("End of quiz.Your score is "+ScoreTracker+" Thank you!");
     }
-  
-    currentQuestionIndex++;
 }
 
-function checkAnswer(selected, correct) {
-    if (selected === correct) {
-        score += 1;
+// Function to shuffle an array (Fisher-Yates shuffle algorithm)
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
-    alert(selected === correct ? "Correct!" : "Incorrect!");
-    displayQuestion();
-    currentQuestionIndex++;
+    return array;
 }
 
-function displayScore() {
-    const finalScore = localStorage.getItem('finalScore') === null ? 0 : parseInt(localStorage.getItem('finalScore'));
-    const totalQuestions = localStorage.getItem('totalQuestions');
-    document.getElementById('finalScore').textContent = `You scored ${finalScore} out of ${totalQuestions}`;
+var currentIndex = 0;
+var ScoreTracker=0;
 
+if (window.location.pathname.includes('/quiz')) {
+    // Execute this code when the URL contains '/quiz'
+    updateQuestion(currentIndex);
+
+    // Add event listener to the next button
+    document.getElementById("nextButton").addEventListener("click", function() {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+            updateQuestion(currentIndex);
+        } else {
+            alert("End of quiz. Thank you!");
+        }
+    });
 }

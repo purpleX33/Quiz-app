@@ -1,5 +1,8 @@
+
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from mongo import get_quiz_questions, get_mongo_connection
+from mongo import get_quiz_questions, get_mongo_connection,api_to_mongo
+
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -59,6 +62,18 @@ def genre():
 def quiz():
     questions = get_quiz_questions()
     return render_template('quiz.html', questions=questions)
+
+@app.route('/api_to_mongo', methods=['POST'])
+def call_api_to_mongo():
+    data = request.json
+    genre = data.get('genre')
+    print(genre)
+    if genre:
+        api_to_mongo(genre)
+        print(genre)
+        return 'API call successful', 200
+    else:
+        return 'Invalid request', 400
 
 @app.route('/submit', methods=['POST'])
 def submit():
